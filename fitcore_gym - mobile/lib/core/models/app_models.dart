@@ -1,8 +1,6 @@
 enum UserRole {
-  memberActive,
-  memberPending,
-  subManager,
-  superAdmin,
+  user,
+  admin,
 }
 
 enum CheckInStatus {

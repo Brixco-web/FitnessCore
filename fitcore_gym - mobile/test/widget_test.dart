@@ -7,7 +7,7 @@ void main() {
   group('FitCore State Tests', () {
     test('Initial state loads active member and pending members', () {
       final state = FitCoreState();
-      expect(state.currentRole, equals(UserRole.memberActive));
+      expect(state.currentRole, equals(UserRole.user));
       expect(state.activeMember.fullName, equals('Alex Morgan'));
       expect(state.pendingMembers.length, equals(3));
     });
@@ -37,7 +37,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('TEST ROLE:'), findsOneWidget);
-      expect(find.text('Active Member'), findsOneWidget);
+      expect(find.text('User (Member)'), findsOneWidget);
+      expect(find.text('Admin'), findsOneWidget);
       expect(find.text('Welcome back,'), findsOneWidget);
       expect(find.text('Scan Gym QR Station'), findsOneWidget);
     });

@@ -4,8 +4,6 @@ import 'core/models/app_models.dart';
 import 'core/state/fitcore_state.dart';
 import 'features/member_portal/presentation/member_portal_screen.dart';
 import 'features/attendance_calendar/presentation/attendance_calendar_screen.dart';
-import 'features/pending_onboarding/presentation/pending_verification_screen.dart';
-import 'features/gatekeeper_console/presentation/gatekeeper_console_screen.dart';
 import 'features/super_admin_hub/presentation/super_admin_hub_screen.dart';
 
 void main() {
@@ -57,7 +55,7 @@ class _FitCoreAppState extends State<FitCoreApp> {
             ),
           ],
         ),
-        bottomNavigationBar: _state.currentRole == UserRole.memberActive
+        bottomNavigationBar: _state.currentRole == UserRole.user
             ? BottomNavigationBar(
                 currentIndex: _memberBottomNavIndex,
                 onTap: (index) {
@@ -110,10 +108,8 @@ class _FitCoreAppState extends State<FitCoreApp> {
                   SizedBox(width: 8),
                 ],
               ),
-              _roleChip('Active Member', UserRole.memberActive),
-              _roleChip('Pending Member', UserRole.memberPending),
-              _roleChip('Gatekeeper Desk', UserRole.subManager),
-              _roleChip('Super Admin', UserRole.superAdmin),
+              _roleChip('User (Member)', UserRole.user),
+              _roleChip('Admin', UserRole.admin),
             ],
           ),
         ),
@@ -149,15 +145,11 @@ class _FitCoreAppState extends State<FitCoreApp> {
 
   Widget _buildCurrentInterface() {
     switch (_state.currentRole) {
-      case UserRole.memberActive:
+      case UserRole.user:
         return _memberBottomNavIndex == 0
             ? MemberPortalScreen(state: _state)
             : AttendanceCalendarScreen(state: _state);
-      case UserRole.memberPending:
-        return PendingVerificationScreen(state: _state);
-      case UserRole.subManager:
-        return GatekeeperConsoleScreen(state: _state);
-      case UserRole.superAdmin:
+      case UserRole.admin:
         return SuperAdminHubScreen(state: _state);
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/state/fitcore_state.dart';
+import 'package:vvu_fitness_core/core/theme/app_theme.dart';
+import 'package:vvu_fitness_core/core/state/fitcore_state.dart';
 
 class SuperAdminHubScreen extends StatelessWidget {
   final FitCoreState state;
@@ -225,7 +225,7 @@ class SuperAdminHubScreen extends StatelessWidget {
                         title: const Text('Manual Check-in Override', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                         subtitle: const Text('Allow checking in students without phones', style: TextStyle(fontSize: 10)),
                         value: staff.enableManualOverrides,
-                        activeColor: FitCoreColors.primary,
+                        activeThumbColor: FitCoreColors.primary,
                         contentPadding: EdgeInsets.zero,
                         dense: true,
                         onChanged: (val) => state.toggleStaffOverride(staff.staffId),
@@ -234,7 +234,7 @@ class SuperAdminHubScreen extends StatelessWidget {
                         title: const Text('Daily QR Station Regeneration', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                         subtitle: const Text('Permission to refresh daily event codes', style: TextStyle(fontSize: 10)),
                         value: staff.dailyQrRegeneration,
-                        activeColor: FitCoreColors.primary,
+                        activeThumbColor: FitCoreColors.primary,
                         contentPadding: EdgeInsets.zero,
                         dense: true,
                         onChanged: (val) => state.toggleStaffQrRegen(staff.staffId),

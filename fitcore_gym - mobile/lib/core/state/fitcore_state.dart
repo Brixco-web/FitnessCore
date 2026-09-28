@@ -3,7 +3,7 @@ import '../models/app_models.dart';
 
 class FitCoreState extends ChangeNotifier {
   // Current active preview role
-  UserRole _currentRole = UserRole.memberActive;
+  UserRole _currentRole = UserRole.user;
   UserRole get currentRole => _currentRole;
 
   // Active user profile
@@ -38,7 +38,7 @@ class FitCoreState extends ChangeNotifier {
       fullName: 'Alex Morgan',
       department: 'Sports Science & Kinesiology',
       photoUrl: '',
-      role: UserRole.memberActive,
+      role: UserRole.user,
       streakDays: 12,
       weeklySessionsCompleted: 3,
       weeklySessionsGoal: 4,
@@ -53,7 +53,7 @@ class FitCoreState extends ChangeNotifier {
         fullName: 'Kwame Mensah',
         department: 'Computer Science',
         photoUrl: '',
-        role: UserRole.memberPending,
+        role: UserRole.user,
         registeredAt: DateTime.now().subtract(const Duration(hours: 2)),
         tuitionVerified: true,
       ),
@@ -63,7 +63,7 @@ class FitCoreState extends ChangeNotifier {
         fullName: 'Amina Bello',
         department: 'Nursing',
         photoUrl: '',
-        role: UserRole.memberPending,
+        role: UserRole.user,
         registeredAt: DateTime.now().subtract(const Duration(hours: 5)),
         tuitionVerified: false,
       ),
@@ -73,7 +73,7 @@ class FitCoreState extends ChangeNotifier {
         fullName: 'Marcus Vance',
         department: 'Business Administration',
         photoUrl: '',
-        role: UserRole.memberPending,
+        role: UserRole.user,
         registeredAt: DateTime.now().subtract(const Duration(hours: 8)),
         tuitionVerified: true,
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/state/fitcore_state.dart';
+import 'package:vvu_fitness_core/core/theme/app_theme.dart';
+import 'package:vvu_fitness_core/core/state/fitcore_state.dart';
 
 class PendingVerificationScreen extends StatelessWidget {
   final FitCoreState state;
