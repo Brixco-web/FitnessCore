@@ -1,55 +1,92 @@
-/* ═══════════════════════════════════════════════════════════════
-   FitCore — Web Application Entry Point (TypeScript)
-   Features the 2 roles: User and Admin
-   ═══════════════════════════════════════════════════════════════ */
-
 import './style.css';
-import { FitCoreState } from './core/state';
-import { UserRole } from './core/models';
-import { renderNavbar, bindNavbarEvents } from './features/navigation/navbar';
-import { renderUserPortal, bindUserPortalEvents } from './features/user_portal/user_portal';
-import { renderAdminConsole, bindAdminConsoleEvents } from './features/admin_console/admin_console';
+import { renderAdminOverview } from './features/admin_console/admin_overview';
+import { renderAdminLiveDesk } from './features/admin_console/admin_livedesk';
+import { renderAdminApprovals } from './features/admin_console/admin_approvals';
+import { renderAdminAccess } from './features/admin_console/admin_access';
+import { renderMemberHome } from './features/member_portal/member_home';
+import { renderMemberCalendar } from './features/member_portal/member_calendar';
+import { renderMemberRanks } from './features/member_portal/member_ranks';
+import { renderMemberFeed } from './features/member_portal/member_feed';
+import { renderBottomNav } from './features/navigation/bottom_nav';
 
-// Instantiate reactive state
-const state = new FitCoreState();
+// ── App state ──────────────────────────────────────────────────────────────
+type Role = 'admin' | 'user';
+type AdminTab = 'overview' | 'livedesk' | 'approvals' | 'access';
+type MemberTab = 'home' | 'calendar' | 'ranks' | 'feed';
 
+let currentRole: Role = 'admin';
+let adminTab: AdminTab = 'overview';
+let memberTab: MemberTab = 'home';
+
+// ── Render ─────────────────────────────────────────────────────────────────
 function renderApp(): void {
-  const appContainer = document.getElementById('app');
-  if (!appContainer) return;
+  const app = document.getElementById('app');
+  if (!app) return;
 
-  const currentRole = state.currentRole;
+  let screenHtml = '';
+  let navHtml = '';
 
-  appContainer.innerHTML = `
-    <div class="fitcore-app-wrapper">
-      <!-- Global Navigation with 2-Role Switcher -->
-      ${renderNavbar(state)}
+  if (currentRole === 'admin') {
+    navHtml = renderBottomNav('admin', adminTab);
+    switch (adminTab) {
+      case 'overview':  screenHtml = renderAdminOverview();  break;
+      case 'livedesk':  screenHtml = renderAdminLiveDesk();  break;
+      case 'approvals': screenHtml = renderAdminApprovals(); break;
+      case 'access':    screenHtml = renderAdminAccess();    break;
+    }
+  } else {
+    navHtml = renderBottomNav('user', memberTab);
+    switch (memberTab) {
+      case 'home':     screenHtml = renderMemberHome();     break;
+      case 'calendar': screenHtml = renderMemberCalendar(); break;
+      case 'ranks':    screenHtml = renderMemberRanks();    break;
+      case 'feed':     screenHtml = renderMemberFeed();     break;
+    }
+  }
 
-      <!-- Main Dynamic Content Container -->
-      <main class="main-content-area container">
-        ${
-          currentRole === UserRole.User
-            ? renderUserPortal(state)
-            : renderAdminConsole(state)
-        }
-      </main>
-
-      <!-- App Toast Container -->
-      <div id="toast-container" class="toast-container" aria-live="polite"></div>
+  app.innerHTML = `
+    <div class="flex flex-col min-h-screen relative">
+      ${screenHtml}
+      ${navHtml}
     </div>
   `;
-
-  // Bind active DOM event handlers
-  bindNavbarEvents(state);
-
-  if (currentRole === UserRole.User) {
-    bindUserPortalEvents(state);
-  } else {
-    bindAdminConsoleEvents(state);
-  }
 }
 
-// Subscribe to state mutations for seamless reactivity
-state.addListener(renderApp);
+// ── Global handlers attached to window ────────────────────────────────────
+(window as any).fitcoreSetRole = (role: Role): void => {
+  currentRole = role;
+  renderApp();
+};
 
-// Initial application render
+(window as any).fitcoreAdminTab = (tab: AdminTab): void => {
+  currentRole = 'admin';
+  adminTab = tab;
+  renderApp();
+};
+
+(window as any).fitcoreMemberTab = (tab: MemberTab): void => {
+  currentRole = 'user';
+  memberTab = tab;
+  renderApp();
+};
+
+(window as any).fitcoreManualCheckin = (): void => {
+  const input = document.getElementById('checkin-search') as HTMLInputElement;
+  const resultEl = document.getElementById('checkin-result');
+  if (!input || !resultEl) return;
+  if (input.value.trim().length < 2) {
+    input.classList.add('border-error', 'ring-error');
+    setTimeout(() => input.classList.remove('border-error', 'ring-error'), 1500);
+    return;
+  }
+  resultEl.classList.remove('hidden');
+  resultEl.innerHTML = `
+    <span class="material-symbols-outlined text-secondary" style="font-size:18px;font-variation-settings:'FILL' 1">check_circle</span>
+    <span class="text-body-sm font-body-md font-semibold text-secondary">Check-in successful — <strong>${input.value}</strong>!</span>
+  `;
+  input.value = '';
+  setTimeout(() => resultEl.classList.add('hidden'), 3000);
+};
+
+// ── Boot ──────────────────────────────────────────────────────────────────
 renderApp();
